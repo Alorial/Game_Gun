@@ -52,9 +52,31 @@ class ball():
         и стен по краям окна (размер окна 800х600).
         """
         # FIXME
+
+        global balls
+
+        canv.move(self.id, self.vx, -self.vy)
+
         self.x += self.vx
         self.y -= self.vy
 
+        self.vy -= 2
+
+        if self.x <= self.r:
+            self.vx = - 0.8 * self.vx
+        if self.x >= 780 - self.r:
+            self.vx = - 0.8 * self.vx
+        if self.y <= self.r:
+            self.vy = - 0.5 * self.vy
+        if self.y >= 580 - self.r:
+            self.vy = - 0.5 * self.vy
+
+        self.live -= 0.5
+        if self.live < 0:
+            canv.delete(self.id)
+            balls.remove(self)
+        
+        
     def hittest(self, obj):
         """Функция проверяет сталкивалкивается ли данный обьект с целью, описываемой в обьекте obj.
 
@@ -122,7 +144,6 @@ class target():
     def __init__(self, x=40, y=450):
         self.points = 0
         self.live = 1
-    # FIXME: don't work!!! How to call this functions when object is created?
         self.id = canv.create_oval(0,0,0,0)
         self.id_points = canv.create_text(30,30,text = self.points,font = '28')
         self.new_target()
@@ -181,4 +202,4 @@ def new_game(event=''):
 
 new_game()
 
-mainloop()
+root.mainloop()
