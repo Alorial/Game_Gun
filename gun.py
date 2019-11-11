@@ -164,12 +164,30 @@ class target():
         canv.coords(self.id, x-r, y-r, x+r, y+r)
         canv.itemconfig(self.id, fill=color)
 
+        dx = self.dx = rnd(-10, 10)
+        dy = self.dy = rnd(-10, 10)
+
     def hit(self, points=1):
         """Попадание шарика в цель."""
         canv.coords(self.id, -10, -10, -10, -10)
         self.points += points
         canv.itemconfig(self.id_points, text=self.points)
 
+    def moving(self):
+        """Движение мишеней"""
+        self.x += self.dx
+        self.y += self.dy
+        
+        if self.x <= self.r:
+            self.dx = - self.dx
+        if self.x >= 780 - self.r:
+            self.dx = - self.dx
+        if self.y <= self.r:
+            self.dy = - self.dy
+        if self.y >= 580 - self.r:
+            self.dy = - self.dy
+
+        canv.move(self.id, self.dx, self.dy)
 
 t1 = target()
 t2 = target()
@@ -209,6 +227,8 @@ def new_game(event=''):
         time.sleep(z)
         g1.targetting()
         g1.power_up()
+        t1.moving()
+        t2.moving()
     canv.itemconfig(screen1, text='')
     canv.delete(gun)
     root.after(750, new_game)
